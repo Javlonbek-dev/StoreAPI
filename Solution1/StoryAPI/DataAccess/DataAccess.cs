@@ -46,5 +46,31 @@ namespace StoryAPI.DataAccess
 
             return productCategories;
         }
+
+        public ProductCategory GetProductCategory(int id)
+        {
+                var productCategory = new ProductCategory();
+                using (SqlConnection connection = new(dbconnection))
+                {
+                    SqlCommand command = new()
+                    {
+                        Connection = connection
+                    };
+
+                    string query = "SELECT * FROM ProductCategories WHERE CategoryId=" + id + ";";
+                    command.CommandText = query;
+
+                    connection.Open();
+                    SqlDataReader r = command.ExecuteReader();
+                    while (r.Read())
+                    {
+                        productCategory.Id = (int)r["CategoryId"];
+                        productCategory.Category = (string)r["Category"];
+                        productCategory.Subcategory = (string)r["Subcategory"];
+                    }
+
+                }
+                return productCategory;
+            }
     }
 }
